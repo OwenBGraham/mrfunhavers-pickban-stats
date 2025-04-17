@@ -1,15 +1,24 @@
 import { render, screen } from '@testing-library/react';
 import { MapStats } from '../MapStats';
-import { mockAgentStats } from '@/lib/mockData';
+import { agentPicks } from '@/services/tournament';
 import { AgentStats } from '@/types/agent';
 
 describe('MapStats', () => {
   const mapName = 'Ascent';
+  const mockAgentStats: Record<string, AgentStats> = {
+    'Jett': {
+      agent: 'Jett',
+      totalPicks: 10,
+      winRate: 50,
+      pickRate: 20,
+      firstPickRate: 30,
+      teamWinRates: {},
+      mapWinRates: { [mapName]: 60 }
+    }
+  };
 
   it('renders map statistics correctly', () => {
     render(<MapStats agentStats={mockAgentStats} mapName={mapName} />);
-
-    // Check if all statistics are displayed
     expect(screen.getByText(`${mapName} Statistics`)).toBeInTheDocument();
     expect(screen.getByText('Total Map Picks')).toBeInTheDocument();
     expect(screen.getByText('Average Map Win Rate')).toBeInTheDocument();
@@ -19,18 +28,15 @@ describe('MapStats', () => {
   it('calculates and displays map-specific statistics correctly', () => {
     render(<MapStats agentStats={mockAgentStats} mapName={mapName} />);
     
-    // Filter stats for the specific map
     const mapStats = Object.entries(mockAgentStats).filter(([_, stats]) => 
       stats.mapWinRates?.[mapName] !== undefined
     );
     
-    // Calculate expected values
     const expectedTotalPicks = mapStats.reduce((sum, [_, stats]) => sum + stats.totalPicks, 0);
     const expectedAverageWinRate = mapStats.length > 0
       ? mapStats.reduce((sum, [_, stats]) => sum + (stats.mapWinRates?.[mapName] || 0), 0) / mapStats.length
       : 0;
     
-    // Check if values are displayed correctly
     const totalPicksSection = screen.getByText('Total Map Picks').closest('div');
     expect(totalPicksSection).toHaveTextContent(expectedTotalPicks.toString());
     
@@ -44,7 +50,6 @@ describe('MapStats', () => {
   it('displays most picked agent for map correctly', () => {
     render(<MapStats agentStats={mockAgentStats} mapName={mapName} />);
     
-    // Find the agent with highest totalPicks for this map
     const mapStats = Object.entries(mockAgentStats).filter(([_, stats]) => 
       stats.mapWinRates?.[mapName] !== undefined
     );
@@ -55,7 +60,6 @@ describe('MapStats', () => {
       { name: '', stats: { totalPicks: 0 } as AgentStats }
     );
     
-    // Find the agent name within the "Most Picked Agent" section
     const mostPickedSection = screen.getByText('Most Picked Agent').closest('div');
     if (mostPickedAgent.name) {
       expect(mostPickedSection).toHaveTextContent(mostPickedAgent.name);
@@ -66,7 +70,6 @@ describe('MapStats', () => {
   it('displays highest win rate agent for map correctly', () => {
     render(<MapStats agentStats={mockAgentStats} mapName={mapName} />);
     
-    // Find the agent with highest winRate for this map
     const mapStats = Object.entries(mockAgentStats).filter(([_, stats]) => 
       stats.mapWinRates?.[mapName] !== undefined
     );
@@ -79,7 +82,6 @@ describe('MapStats', () => {
       { name: '', stats: { mapWinRates: {} } as AgentStats }
     );
     
-    // Find the agent name within the "Highest Win Rate" section
     const highestWinRateSection = screen.getByText('Highest Win Rate').closest('div');
     if (highestWinRateAgent.name) {
       expect(highestWinRateSection).toHaveTextContent(highestWinRateAgent.name);
@@ -93,7 +95,6 @@ describe('MapStats', () => {
     const emptyStats: Record<string, AgentStats> = {};
     render(<MapStats agentStats={emptyStats} mapName={mapName} />);
     
-    // Check that all values are 0 or empty
     const totalPicksSection = screen.getByText('Total Map Picks').closest('div');
     expect(totalPicksSection).toHaveTextContent('0');
     

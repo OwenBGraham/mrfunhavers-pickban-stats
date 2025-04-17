@@ -1,15 +1,24 @@
 import { render, screen } from '@testing-library/react';
 import { TeamStats } from '../TeamStats';
-import { mockAgentStats } from '@/lib/mockData';
+import { agentPicks } from '@/services/tournament';
 import { AgentStats } from '@/types/agent';
 
 describe('TeamStats', () => {
   const teamName = 'Team A';
+  const mockAgentStats: Record<string, AgentStats> = {
+    'Jett': {
+      agent: 'Jett',
+      totalPicks: 10,
+      winRate: 50,
+      pickRate: 20,
+      firstPickRate: 30,
+      teamWinRates: { [teamName]: 60 },
+      mapWinRates: {}
+    }
+  };
 
   it('renders team statistics correctly', () => {
     render(<TeamStats agentStats={mockAgentStats} teamName={teamName} />);
-
-    // Check if all statistics are displayed
     expect(screen.getByText(`${teamName} Statistics`)).toBeInTheDocument();
     expect(screen.getByText('Total Team Picks')).toBeInTheDocument();
     expect(screen.getByText('Average Team Win Rate')).toBeInTheDocument();
@@ -19,18 +28,15 @@ describe('TeamStats', () => {
   it('calculates and displays team-specific statistics correctly', () => {
     render(<TeamStats agentStats={mockAgentStats} teamName={teamName} />);
     
-    // Filter stats for the specific team
     const teamStats = Object.entries(mockAgentStats).filter(([_, stats]) => 
       stats.teamWinRates[teamName] !== undefined
     );
     
-    // Calculate expected values
     const expectedTotalPicks = teamStats.reduce((sum, [_, stats]) => sum + stats.totalPicks, 0);
     const expectedAverageWinRate = teamStats.length > 0
       ? teamStats.reduce((sum, [_, stats]) => sum + (stats.teamWinRates[teamName] || 0), 0) / teamStats.length
       : 0;
     
-    // Check if values are displayed correctly
     const totalPicksSection = screen.getByText('Total Team Picks').closest('div');
     expect(totalPicksSection).toHaveTextContent(expectedTotalPicks.toString());
     
@@ -44,7 +50,6 @@ describe('TeamStats', () => {
   it('displays most picked agent for team correctly', () => {
     render(<TeamStats agentStats={mockAgentStats} teamName={teamName} />);
     
-    // Find the agent with highest totalPicks for this team
     const teamStats = Object.entries(mockAgentStats).filter(([_, stats]) => 
       stats.teamWinRates[teamName] !== undefined
     );
@@ -55,7 +60,6 @@ describe('TeamStats', () => {
       { name: '', stats: { totalPicks: 0 } as AgentStats }
     );
     
-    // Find the agent name within the "Most Picked Agent" section
     const mostPickedSection = screen.getByText('Most Picked Agent').closest('div');
     if (mostPickedAgent.name) {
       expect(mostPickedSection).toHaveTextContent(mostPickedAgent.name);
@@ -66,7 +70,6 @@ describe('TeamStats', () => {
   it('displays highest win rate agent for team correctly', () => {
     render(<TeamStats agentStats={mockAgentStats} teamName={teamName} />);
     
-    // Find the agent with highest winRate for this team
     const teamStats = Object.entries(mockAgentStats).filter(([_, stats]) => 
       stats.teamWinRates[teamName] !== undefined
     );
@@ -79,7 +82,6 @@ describe('TeamStats', () => {
       { name: '', stats: { teamWinRates: {} } as AgentStats }
     );
     
-    // Find the agent name within the "Highest Win Rate" section
     const highestWinRateSection = screen.getByText('Highest Win Rate').closest('div');
     if (highestWinRateAgent.name) {
       expect(highestWinRateSection).toHaveTextContent(highestWinRateAgent.name);
@@ -93,7 +95,6 @@ describe('TeamStats', () => {
     const emptyStats: Record<string, AgentStats> = {};
     render(<TeamStats agentStats={emptyStats} teamName={teamName} />);
     
-    // Check that all values are 0 or empty
     const totalPicksSection = screen.getByText('Total Team Picks').closest('div');
     expect(totalPicksSection).toHaveTextContent('0');
     

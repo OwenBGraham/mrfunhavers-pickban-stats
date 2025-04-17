@@ -1,7 +1,5 @@
 import { MapStats } from "@/components/MapStats";
-import { mockAgentStats } from "@/lib/mockData";
-import { mockMaps } from "@/lib/mockData";
-import { Map } from "@/types/valorant";
+import { agentStats, maps } from "@/lib/tournamentData";
 
 export default function MapsPage() {
   return (
@@ -9,10 +7,10 @@ export default function MapsPage() {
       <h1 className="text-3xl font-bold">Map Statistics</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {mockMaps.map((map: Map) => (
+        {maps.map((map) => (
           <MapStats
             key={map.id}
-            agentStats={mockAgentStats}
+            agentStats={agentStats}
             mapName={map.name}
           />
         ))}

@@ -5,5 +5,5 @@ export interface AgentStats {
   pickRate: number;
   firstPickRate: number;
   teamWinRates: Record<string, number>;
-  mapWinRates?: Record<string, number>;
+  mapWinRates: Record<string, number>;
 } 

@@ -1,45 +1,44 @@
 import { render, screen } from '@testing-library/react';
-import { AgentCard } from '../AgentCard';
-import { mockAgents, mockAgentStats } from '@/lib/mockData';
+import AgentCard from '../AgentCard';
+import { getAgentData } from '@/services/agent';
+import { agentPicks } from '@/services/tournament';
+import { AgentStatistics } from '@/types/valorant';
 
 describe('AgentCard', () => {
-  it('renders agent name and role correctly', () => {
-    const agent = mockAgents[0]; // Jett
-    const stats = mockAgentStats[agent.name];
+  const agent = getAgentData('Jett')!;
+  const stats: AgentStatistics = {
+    agent: 'Jett',
+    totalPicks: 1,
+    winRate: 0.0,
+    pickRate: 0.0,
+    firstPickRate: 0.0,
+    teamWinRates: {}
+  };
 
+  it('displays agent information', () => {
     render(<AgentCard agent={agent} stats={stats} />);
-
     expect(screen.getByText('Jett')).toBeInTheDocument();
     expect(screen.getByText('Duelist')).toBeInTheDocument();
   });
 
   it('displays correct statistics', () => {
-    const agent = mockAgents[0]; // Jett
-    const stats = mockAgentStats[agent.name];
-
     render(<AgentCard agent={agent} stats={stats} />);
-
-    expect(screen.getByText('75.0%')).toBeInTheDocument(); // Pick Rate
-    expect(screen.getByText('55.5%')).toBeInTheDocument(); // Win Rate
-    expect(screen.getByText('45')).toBeInTheDocument(); // Total Picks
-    expect(screen.getByText('30.0%')).toBeInTheDocument(); // First Pick Rate
+    expect(screen.getByText(`Picks: ${stats.totalPicks}`)).toBeInTheDocument();
+    expect(screen.getByText(`Win Rate: ${stats.winRate.toFixed(1)}%`)).toBeInTheDocument();
   });
 
   it('handles missing statistics gracefully', () => {
-    const agent = mockAgents[0]; // Jett
-    const emptyStats = {
-      agent: agent.name,
+    const emptyStats: AgentStatistics = {
+      agent: 'Jett',
       totalPicks: 0,
-      winRate: 0,
-      pickRate: 0,
-      firstPickRate: 0,
-      teamWinRates: {},
+      winRate: 0.0,
+      pickRate: 0.0,
+      firstPickRate: 0.0,
+      teamWinRates: {}
     };
 
     render(<AgentCard agent={agent} stats={emptyStats} />);
-
-    // Check that there are exactly 3 elements with '0.0%' (Pick Rate, Win Rate, First Pick Rate)
-    expect(screen.getAllByText('0.0%')).toHaveLength(3);
-    expect(screen.getByText('0')).toBeInTheDocument(); // Total Picks
+    expect(screen.getByText('Picks: 0')).toBeInTheDocument();
+    expect(screen.getByText('Win Rate: 0.0%')).toBeInTheDocument();
   });
 }); 

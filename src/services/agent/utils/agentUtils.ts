@@ -1,5 +1,41 @@
 import { Agent, AgentName, AgentRole, AgentStatistics } from '@/types/valorant';
 
+const agentData: Record<AgentName, { role: AgentRole }> = {
+  'Astra': { role: 'Controller' },
+  'Breach': { role: 'Initiator' },
+  'Brimstone': { role: 'Controller' },
+  'Chamber': { role: 'Sentinel' },
+  'Cypher': { role: 'Sentinel' },
+  'Deadlock': { role: 'Sentinel' },
+  'Fade': { role: 'Initiator' },
+  'Gekko': { role: 'Initiator' },
+  'Harbor': { role: 'Controller' },
+  'Iso': { role: 'Duelist' },
+  'Jett': { role: 'Duelist' },
+  'KAY/O': { role: 'Initiator' },
+  'Killjoy': { role: 'Sentinel' },
+  'Neon': { role: 'Duelist' },
+  'Omen': { role: 'Controller' },
+  'Phoenix': { role: 'Duelist' },
+  'Raze': { role: 'Duelist' },
+  'Reyna': { role: 'Duelist' },
+  'Sage': { role: 'Sentinel' },
+  'Skye': { role: 'Initiator' },
+  'Sova': { role: 'Initiator' },
+  'Viper': { role: 'Controller' },
+  'Yoru': { role: 'Duelist' }
+};
+
+export function getAgentData(name: string): Agent | null {
+  if (name in agentData) {
+    return {
+      name: name as AgentName,
+      role: agentData[name as AgentName].role
+    };
+  }
+  return null;
+}
+
 /**
  * Groups agents by their role
  * @param agents Array of agents to group
@@ -115,4 +151,14 @@ export function calculateAverageWinRate(agentStats: AgentStatistics): number {
   
   const sum = teamWinRates.reduce((acc, rate) => acc + rate, 0);
   return sum / teamWinRates.length;
+}
+
+export function getAgentRoleColor(role: AgentRole): string {
+  const colors = {
+    'Controller': 'bg-purple-500',
+    'Duelist': 'bg-red-500',
+    'Initiator': 'bg-blue-500',
+    'Sentinel': 'bg-yellow-500'
+  };
+  return colors[role] || 'bg-gray-500';
 } 

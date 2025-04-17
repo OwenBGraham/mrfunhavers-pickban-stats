@@ -1,4 +1,4 @@
-import { AgentStats } from '@/types/agent';
+import { AgentStats } from '../types/agent';
 
 interface StatsSummaryProps {
   agentStats: Record<string, AgentStats>;

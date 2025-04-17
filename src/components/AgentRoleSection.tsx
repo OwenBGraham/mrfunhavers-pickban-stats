@@ -1,10 +1,10 @@
 import { Agent, AgentRole } from '@/types/valorant';
-import { AgentCard } from './AgentCard';
-import { groupAgentsByRole } from '@/utils/agents/agentUtils';
+import AgentCard from './AgentCard';
+import { groupAgentsByRole } from '@/services/agent';
 
 interface AgentRoleSectionProps {
   agents: Agent[];
-  agentStats: Record<string, any>; // We'll type this properly when we have the actual data structure
+  agentStats: Record<string, number>;
 }
 
 export function AgentRoleSection({ agents, agentStats }: AgentRoleSectionProps) {
@@ -20,7 +20,14 @@ export function AgentRoleSection({ agents, agentStats }: AgentRoleSectionProps) 
               <AgentCard
                 key={agent.name}
                 agent={agent}
-                stats={agentStats[agent.name]}
+                stats={{
+                  agent: agent.name,
+                  totalPicks: agentStats[agent.name] || 0,
+                  winRate: 0,
+                  pickRate: 0,
+                  firstPickRate: 0,
+                  teamWinRates: {}
+                }}
               />
             ))}
           </div>
