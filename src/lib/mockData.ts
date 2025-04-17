@@ -1,4 +1,4 @@
-import { AgentName, AgentRole, Agent, Team, Match, Tournament, AgentStatistics, TournamentStatistics } from '@/types/valorant';
+import { AgentName, AgentRole, Agent, Team, Match, Tournament, AgentStatistics, TournamentStatistics, Map } from '@/types/valorant';
 
 // Mock agents data
 export const mockAgents: Agent[] = [
@@ -20,6 +20,20 @@ export const mockTeams: Team[] = [
   { id: 'team2', name: 'Team B', region: 'EMEA', logoUrl: '/team-b-logo.png' },
   { id: 'team3', name: 'Team C', region: 'APAC', logoUrl: '/team-c-logo.png' },
   { id: 'team4', name: 'Team D', region: 'NA', logoUrl: '/team-d-logo.png' },
+];
+
+// Mock maps data
+export const mockMaps: Map[] = [
+  { id: 'map1', name: 'Ascent', imageUrl: '/maps/ascent.jpg' },
+  { id: 'map2', name: 'Bind', imageUrl: '/maps/bind.jpg' },
+  { id: 'map3', name: 'Haven', imageUrl: '/maps/haven.jpg' },
+  { id: 'map4', name: 'Split', imageUrl: '/maps/split.jpg' },
+  { id: 'map5', name: 'Icebox', imageUrl: '/maps/icebox.jpg' },
+  { id: 'map6', name: 'Breeze', imageUrl: '/maps/breeze.jpg' },
+  { id: 'map7', name: 'Fracture', imageUrl: '/maps/fracture.jpg' },
+  { id: 'map8', name: 'Pearl', imageUrl: '/maps/pearl.jpg' },
+  { id: 'map9', name: 'Lotus', imageUrl: '/maps/lotus.jpg' },
+  { id: 'map10', name: 'Sunset', imageUrl: '/maps/sunset.jpg' },
 ];
 
 // Mock tournament data
@@ -59,6 +73,18 @@ export const mockAgentStats: Record<AgentName, AgentStatistics> = {
       'team3': 55,
       'team4': 57,
     },
+    mapWinRates: {
+      'Ascent': 60,
+      'Bind': 55,
+      'Haven': 58,
+      'Split': 52,
+      'Icebox': 50,
+      'Breeze': 45,
+      'Fracture': 48,
+      'Pearl': 53,
+      'Lotus': 56,
+      'Sunset': 54,
+    },
   },
   'Raze': {
     agent: 'Raze',
@@ -72,6 +98,18 @@ export const mockAgentStats: Record<AgentName, AgentStatistics> = {
       'team3': 52,
       'team4': 55,
     },
+    mapWinRates: {
+      'Ascent': 55,
+      'Bind': 58,
+      'Haven': 52,
+      'Split': 60,
+      'Icebox': 45,
+      'Breeze': 50,
+      'Fracture': 53,
+      'Pearl': 48,
+      'Lotus': 51,
+      'Sunset': 49,
+    },
   },
   'Sova': {
     agent: 'Sova',
@@ -84,6 +122,18 @@ export const mockAgentStats: Record<AgentName, AgentStatistics> = {
       'team2': 45,
       'team3': 50,
       'team4': 60,
+    },
+    mapWinRates: {
+      'Ascent': 58,
+      'Bind': 52,
+      'Haven': 60,
+      'Split': 55,
+      'Icebox': 48,
+      'Breeze': 53,
+      'Fracture': 50,
+      'Pearl': 56,
+      'Lotus': 49,
+      'Sunset': 51,
     },
   },
   // Add default stats for all other agents

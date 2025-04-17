@@ -41,6 +41,13 @@ export interface Team {
   logoUrl?: string;
 }
 
+// Map types
+export interface Map {
+  id: string;
+  name: string;
+  imageUrl?: string;
+}
+
 // Match types
 export interface MapPick {
   mapName: string;
@@ -88,6 +95,7 @@ export interface AgentStatistics {
   pickRate: number;
   firstPickRate: number;
   teamWinRates: Record<Team['id'], number>;
+  mapWinRates?: Record<string, number>;
 }
 
 export interface TournamentStatistics {
