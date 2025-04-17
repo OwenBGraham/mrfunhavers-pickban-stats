@@ -11,7 +11,7 @@ export default function Header({ activeLink = '/' }: HeaderProps) {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <a className="text-white text-xl font-bold" href="/">
-              VALORANT Stats
+              FunhaverGG Stats
             </a>
           </div>
           <div className="flex space-x-4">

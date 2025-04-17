@@ -1,31 +1,81 @@
-import { AgentRoleSection } from '@/components/AgentRoleSection';
-import { getAgentData } from '@/services/agent';
-import { agentPicks } from '@/services/tournament';
+import { StatCard } from '@/components/StatCard';
+import { TopAgentsList } from '@/components/TopAgentsList';
+import { AgentStatsGraph } from '@/components/AgentStatsGraph';
+import { agentPicks, agentBans, pickPeakData, banPeakData } from '@/services/tournament/tournamentData';
 
 export default function Home() {
-  const agents = Object.keys(agentPicks)
-    .map(name => getAgentData(name))
-    .filter((agent): agent is NonNullable<typeof agent> => agent !== null);
+  // Ensure we have data before proceeding
+  if (!agentPicks || !agentBans || !pickPeakData || !banPeakData) {
+    return (
+      <main className="min-h-screen p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center text-gray-400">Loading statistics...</div>
+        </div>
+      </main>
+    );
+  }
+
+  // Find most picked agent
+  const mostPickedAgent = Object.entries(agentPicks)
+    .sort(([, a], [, b]) => b - a)[0];
+
+  // Find most banned agent
+  const mostBannedAgent = Object.entries(agentBans)
+    .sort(([, a], [, b]) => b - a)[0];
+
+  // Get top 5 picked agents
+  const topPickedAgents = Object.entries(agentPicks)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 5);
+
+  // Get top 5 banned agents
+  const topBannedAgents = Object.entries(agentBans)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 5);
 
   return (
     <main className="min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Valorant Champions Tour 2024</h1>
+          <h1 className="text-4xl font-bold mb-2">Mad Science Draft Series 2 & 3 2025</h1>
           <p className="text-gray-400">
-            {new Date('2024-01-01').toLocaleDateString()} -{' '}
-            {new Date('2024-12-31').toLocaleDateString()}
+            03/07/25 - 03/09/25 & 04/11/25 - 04/13/25
           </p>
         </div>
 
         <div className="grid gap-8">
-          <section className="bg-white/5 p-6 rounded-lg">
-            <h2 className="text-2xl font-semibold mb-4">Agent Statistics</h2>
-            <AgentRoleSection
-              agents={agents}
-              agentStats={agentPicks}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <StatCard
+              title="Most Picked Agent"
+              agentName={mostPickedAgent[0]}
+              value={mostPickedAgent[1]}
             />
-          </section>
+            <StatCard
+              title="Most Banned Agent"
+              agentName={mostBannedAgent[0]}
+              value={mostBannedAgent[1]}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <TopAgentsList
+              title="Top 5 Picked Agents"
+              agents={topPickedAgents}
+              type="picks"
+              peakData={pickPeakData}
+            />
+            <TopAgentsList
+              title="Top 5 Banned Agents"
+              agents={topBannedAgents}
+              type="bans"
+              peakData={banPeakData}
+            />
+          </div>
+
+          <AgentStatsGraph
+            agentPicks={agentPicks}
+            agentBans={agentBans}
+          />
         </div>
       </div>
     </main>

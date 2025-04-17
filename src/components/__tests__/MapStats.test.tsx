@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { MapStats } from '../MapStats';
-import { agentPicks } from '@/services/tournament';
+import { agentPicks } from '@/services/tournament/tournamentData';
 import { AgentStats } from '@/types/agent';
 
 describe('MapStats', () => {

@@ -1,39 +1,32 @@
-import AgentCard from "@/components/AgentCard";
-import { AgentRoleSection } from "@/components/AgentRoleSection";
-import { agentPicks, agentBans } from "@/services/tournament";
-import { getAgentData } from "@/services/agent";
-import { Agent } from "@/types/valorant";
+import { AgentRoleSection } from '@/components/AgentRoleSection';
+import { getAgentData } from '@/services/agent';
+import { agentPicks } from '@/services/tournament/tournamentData';
 
 export default function AgentsPage() {
   const agents = Object.keys(agentPicks)
     .map(name => getAgentData(name))
-    .filter((agent): agent is Agent => agent !== null);
+    .filter((agent): agent is NonNullable<typeof agent> => agent !== null);
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-3xl font-bold">Agent Statistics</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {agents.map(agent => (
-          <AgentCard
-            key={agent.name}
-            agent={agent}
-            stats={{
-              agent: agent.name,
-              totalPicks: agentPicks[agent.name],
-              winRate: 0,
-              pickRate: 0,
-              firstPickRate: 0,
-              teamWinRates: {}
-            }}
-          />
-        ))}
-      </div>
+    <main className="min-h-screen p-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2">Mad Science Draft Series 2 & 3 2025</h1>
+          <p className="text-gray-400">
+            03/07/25 - 03/09/25 & 04/11/25 - 04/13/25
+          </p>
+        </div>
 
-      <AgentRoleSection
-        agents={agents}
-        agentStats={agentPicks}
-      />
-    </div>
+        <div className="grid gap-8">
+          <section className="bg-white/5 p-6 rounded-lg">
+            <h2 className="text-2xl font-semibold mb-4">Agent Statistics</h2>
+            <AgentRoleSection
+              agents={agents}
+              agentStats={agentPicks}
+            />
+          </section>
+        </div>
+      </div>
+    </main>
   );
 } 

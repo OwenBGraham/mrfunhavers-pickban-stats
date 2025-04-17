@@ -5,6 +5,7 @@ const agentData: Record<AgentName, { role: AgentRole }> = {
   'Breach': { role: 'Initiator' },
   'Brimstone': { role: 'Controller' },
   'Chamber': { role: 'Sentinel' },
+  'Clove': { role: 'Controller' },
   'Cypher': { role: 'Sentinel' },
   'Deadlock': { role: 'Sentinel' },
   'Fade': { role: 'Initiator' },
@@ -22,7 +23,10 @@ const agentData: Record<AgentName, { role: AgentRole }> = {
   'Sage': { role: 'Sentinel' },
   'Skye': { role: 'Initiator' },
   'Sova': { role: 'Initiator' },
+  'Tejo': { role: 'Initiator' },
   'Viper': { role: 'Controller' },
+  'Vyse': { role: 'Sentinel' },
+  'Waylay': { role: 'Duelist' },
   'Yoru': { role: 'Duelist' }
 };
 

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import AgentCard from '../AgentCard';
 import { getAgentData } from '@/services/agent';
-import { agentPicks } from '@/services/tournament';
+import { agentPicks } from '@/services/tournament/tournamentData';
 import { AgentStatistics } from '@/types/valorant';
 
 describe('AgentCard', () => {

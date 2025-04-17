@@ -4,6 +4,7 @@ export type AgentName =
   | 'Breach'
   | 'Brimstone'
   | 'Chamber'
+  | 'Clove'
   | 'Cypher'
   | 'Deadlock'
   | 'Fade'
@@ -21,7 +22,10 @@ export type AgentName =
   | 'Sage'
   | 'Skye'
   | 'Sova'
+  | 'Tejo'
   | 'Viper'
+  | 'Vyse'
+  | 'Waylay'
   | 'Yoru';
 
 export type AgentRole = 'Duelist' | 'Initiator' | 'Controller' | 'Sentinel';
@@ -90,8 +94,7 @@ export interface Tournament {
 export interface AgentStatistics {
   agent: AgentName;
   totalPicks: number;
-  totalBans?: number;
-  winRate: number;
+  totalBans: number;
   pickRate: number;
   firstPickRate: number;
   teamWinRates: Record<Team['id'], number>;

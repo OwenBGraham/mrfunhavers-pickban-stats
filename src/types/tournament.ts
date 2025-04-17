@@ -3,19 +3,20 @@ export type DraftAction = 'PICK' | 'BAN';
 export interface DraftPhase {
   phase: number;
   agent: string;
-  team: 'A' | 'B';
-  action: DraftAction;
+  team: string;
+  action: string;
 }
 
 export interface DraftData {
   team_a: string;
   team_b: string;
   state: DraftPhase[][];
+  maps: string[];
 }
 
 export interface TournamentMatch {
   _id: string;
-  status: 'COMPLETED' | 'UPCOMING' | 'ONGOING';
+  status: string;
   draft_data: DraftData;
   map?: string;
   winner?: 'A' | 'B';

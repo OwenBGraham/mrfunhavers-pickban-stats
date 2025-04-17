@@ -3,20 +3,27 @@ import { TeamStatistics } from "@/types/tournament";
 interface TeamCardProps {
   teamName: string;
   stats: {
-    wins: number;
-    losses: number;
     agentPicks: Record<string, number>;
     agentBans: Record<string, number>;
   };
 }
 
 export const TeamCard = ({ teamName, stats }: TeamCardProps) => {
-  const totalMatches = stats.wins + stats.losses;
-  const winRate = totalMatches > 0 ? (stats.wins / totalMatches) * 100 : 0;
-  const mostPlayedAgents = Object.entries(stats.agentPicks)
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 3)
-    .map(([name, picks]) => ({ name, picks }));
+  // Calculate total picks and bans for the team
+  const totalPicks = Object.values(stats.agentPicks).reduce((sum, count) => sum + count, 0);
+  const totalBans = Object.values(stats.agentBans).reduce((sum, count) => sum + count, 0);
+  
+  // Calculate pick and ban rates for each agent
+  const agentStats = Object.entries(stats.agentPicks).map(([name, picks]) => ({
+    name,
+    picks,
+    bans: stats.agentBans[name] || 0
+  }));
+
+  // Sort by picks and get top 3
+  const mostPlayedAgents = agentStats
+    .sort((a, b) => b.picks - a.picks)
+    .slice(0, 3);
 
   return (
     <div className="bg-gray-800 rounded-lg p-6 shadow-lg">
@@ -24,13 +31,13 @@ export const TeamCard = ({ teamName, stats }: TeamCardProps) => {
       
       <div className="space-y-4">
         <div>
-          <p className="text-gray-400">Total Matches</p>
-          <p className="text-2xl font-bold text-white">{totalMatches}</p>
+          <p className="text-gray-400">Total Picks</p>
+          <p className="text-2xl font-bold text-white">{totalPicks}</p>
         </div>
         
         <div>
-          <p className="text-gray-400">Win Rate</p>
-          <p className="text-2xl font-bold text-white">{winRate.toFixed(1)}%</p>
+          <p className="text-gray-400">Total Bans</p>
+          <p className="text-2xl font-bold text-white">{totalBans}</p>
         </div>
         
         <div>
@@ -39,7 +46,9 @@ export const TeamCard = ({ teamName, stats }: TeamCardProps) => {
             {mostPlayedAgents.map((agent, index) => (
               <div key={index} className="flex justify-between">
                 <span className="text-white">{agent.name}</span>
-                <span className="text-gray-400">{agent.picks} picks</span>
+                <span className="text-gray-400">
+                  {agent.picks} picks, {agent.bans} bans
+                </span>
               </div>
             ))}
           </div>

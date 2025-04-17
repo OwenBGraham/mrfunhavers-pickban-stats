@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { AgentRoleSection } from '../AgentRoleSection';
 import { getAgentData } from '@/services/agent';
-import { agentPicks } from '@/services/tournament';
+import { agentPicks } from '@/services/tournament/tournamentData';
 
 describe('AgentRoleSection', () => {
   const agents = Object.keys(agentPicks)
