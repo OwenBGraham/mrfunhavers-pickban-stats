@@ -9,46 +9,40 @@ interface TeamCardProps {
 }
 
 export const TeamCard = ({ teamName, stats }: TeamCardProps) => {
-  // Calculate total picks and bans for the team
-  const totalPicks = Object.values(stats.agentPicks).reduce((sum, count) => sum + count, 0);
-  const totalBans = Object.values(stats.agentBans).reduce((sum, count) => sum + count, 0);
-  
-  // Calculate pick and ban rates for each agent
-  const agentStats = Object.entries(stats.agentPicks).map(([name, picks]) => ({
-    name,
-    picks,
-    bans: stats.agentBans[name] || 0
-  }));
+  // Calculate most played agents (top 3 by picks)
+  const mostPlayedAgents = Object.entries(stats.agentPicks)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 3);
 
-  // Sort by picks and get top 3
-  const mostPlayedAgents = agentStats
-    .sort((a, b) => b.picks - a.picks)
+  // Calculate most banned agents (top 3 by bans)
+  const mostBannedAgents = Object.entries(stats.agentBans)
+    .sort(([, a], [, b]) => b - a)
     .slice(0, 3);
 
   return (
-    <div className="bg-gray-800 rounded-lg p-6 shadow-lg">
-      <h2 className="text-2xl font-bold text-white mb-4">{teamName}</h2>
+    <div className="bg-gray-800 rounded-lg p-4 shadow-lg">
+      <h2 className="text-xl font-bold text-white mb-3">{teamName}</h2>
       
-      <div className="space-y-4">
-        <div>
-          <p className="text-gray-400">Total Picks</p>
-          <p className="text-2xl font-bold text-white">{totalPicks}</p>
+      <div className="space-y-3">
+        <div className="space-y-2">
+          <h3 className="text-sm font-semibold text-gray-300">Most Played Agents</h3>
+          <div className="space-y-1">
+            {mostPlayedAgents.map(([agent, picks], index) => (
+              <div key={index} className="flex justify-between items-center">
+                <span className="text-white text-sm">{agent}</span>
+                <span className="text-gray-400 text-sm">{picks} picks</span>
+              </div>
+            ))}
+          </div>
         </div>
-        
-        <div>
-          <p className="text-gray-400">Total Bans</p>
-          <p className="text-2xl font-bold text-white">{totalBans}</p>
-        </div>
-        
-        <div>
-          <p className="text-gray-400">Most Played Agents</p>
-          <div className="mt-2 space-y-2">
-            {mostPlayedAgents.map((agent, index) => (
-              <div key={index} className="flex justify-between">
-                <span className="text-white">{agent.name}</span>
-                <span className="text-gray-400">
-                  {agent.picks} picks, {agent.bans} bans
-                </span>
+
+        <div className="space-y-2">
+          <h3 className="text-sm font-semibold text-gray-300">Most Banned Agents</h3>
+          <div className="space-y-1">
+            {mostBannedAgents.map(([agent, bans], index) => (
+              <div key={index} className="flex justify-between items-center">
+                <span className="text-white text-sm">{agent}</span>
+                <span className="text-gray-400 text-sm">{bans} bans</span>
               </div>
             ))}
           </div>
