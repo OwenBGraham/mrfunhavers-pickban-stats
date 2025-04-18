@@ -18,7 +18,7 @@ const processTournamentData = (matches: TournamentMatch[]) => {
   matches.forEach(match => {
     if (match.status !== 'COMPLETED') return;
 
-    const { team_a, team_b, state } = match.draft_data;
+    const { team_a, team_b, state, maps } = match.draft_data;
     const teamNames = { A: team_a, B: team_b };
 
     // Initialize team stats if not exists
@@ -31,8 +31,17 @@ const processTournamentData = (matches: TournamentMatch[]) => {
       }
     });
 
-    // Process each phase of the draft
-    state.forEach(phase => {
+    // Process each set (each reset of phases to 0)
+    let currentSet = 0;
+    let currentMap = maps[currentSet];
+
+    state.forEach((phase, index) => {
+      // Check if this is the start of a new set (phase 0)
+      if (phase[0]?.phase === 0 && index > 0) {
+        currentSet++;
+        currentMap = maps[currentSet];
+      }
+
       phase.forEach(action => {
         const team = teamNames[action.team as 'A' | 'B'];
         const agent = action.agent;
@@ -42,48 +51,50 @@ const processTournamentData = (matches: TournamentMatch[]) => {
           agentPicks[agent] = (agentPicks[agent] || 0) + 1;
           teamStats[team].agentPicks[agent] = (teamStats[team].agentPicks[agent] || 0) + 1;
           
-          // Update map stats if map is available
-          if (match.map) {
-            if (!mapStats[match.map]) {
-              mapStats[match.map] = {
+          // Update map stats
+          if (currentMap) {
+            if (!mapStats[currentMap]) {
+              mapStats[currentMap] = {
                 totalMatches: 0,
                 agentPicks: {},
                 agentBans: {}
               };
             }
-            mapStats[match.map].agentPicks[agent] = (mapStats[match.map].agentPicks[agent] || 0) + 1;
+            mapStats[currentMap].agentPicks[agent] = (mapStats[currentMap].agentPicks[agent] || 0) + 1;
           }
         } else if (action.action === 'BAN') {
           // Update agent bans
           agentBans[agent] = (agentBans[agent] || 0) + 1;
           teamStats[team].agentBans[agent] = (teamStats[team].agentBans[agent] || 0) + 1;
           
-          // Update map stats if map is available
-          if (match.map) {
-            if (!mapStats[match.map]) {
-              mapStats[match.map] = {
+          // Update map stats
+          if (currentMap) {
+            if (!mapStats[currentMap]) {
+              mapStats[currentMap] = {
                 totalMatches: 0,
                 agentPicks: {},
                 agentBans: {}
               };
             }
-            mapStats[match.map].agentBans[agent] = (mapStats[match.map].agentBans[agent] || 0) + 1;
+            mapStats[currentMap].agentBans[agent] = (mapStats[currentMap].agentBans[agent] || 0) + 1;
           }
         }
       });
     });
 
     // Update map total matches
-    if (match.map) {
-      if (!mapStats[match.map]) {
-        mapStats[match.map] = {
-          totalMatches: 0,
-          agentPicks: {},
-          agentBans: {}
-        };
+    maps.forEach(map => {
+      if (map) {
+        if (!mapStats[map]) {
+          mapStats[map] = {
+            totalMatches: 0,
+            agentPicks: {},
+            agentBans: {}
+          };
+        }
+        mapStats[map].totalMatches++;
       }
-      mapStats[match.map].totalMatches++;
-    }
+    });
   });
 
   return { agentPicks, agentBans, teamStats, mapStats };
