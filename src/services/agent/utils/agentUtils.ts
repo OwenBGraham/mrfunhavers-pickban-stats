@@ -31,10 +31,15 @@ const agentData: Record<AgentName, { role: AgentRole }> = {
 };
 
 export function getAgentData(name: string): Agent | null {
-  if (name in agentData) {
+  const normalizedName = name.toLowerCase();
+  const agentName = Object.keys(agentData).find(
+    key => key.toLowerCase() === normalizedName
+  ) as AgentName | undefined;
+  
+  if (agentName) {
     return {
-      name: name as AgentName,
-      role: agentData[name as AgentName].role
+      name: agentName,
+      role: agentData[agentName].role
     };
   }
   return null;
