@@ -1,11 +1,12 @@
 import { StatCard } from '@/components/StatCard';
 import { TopAgentsList } from '@/components/TopAgentsList';
 import { AgentStatsGraph } from '@/components/AgentStatsGraph';
-import { agentPicks, agentBans, pickPeakData, banPeakData } from '@/services/tournament/tournamentData';
+import { TeamAgentPreferences } from '@/components/TeamAgentPreferences';
+import { agentPicks, agentBans, pickPeakData, banPeakData, teamStats } from '@/services/tournament/tournamentData';
 
 export default function Home() {
   // Ensure we have data before proceeding
-  if (!agentPicks || !agentBans || !pickPeakData || !banPeakData) {
+  if (!agentPicks || !agentBans || !pickPeakData || !banPeakData || !teamStats) {
     return (
       <main className="min-h-screen p-8">
         <div className="max-w-7xl mx-auto">
@@ -69,6 +70,21 @@ export default function Home() {
               agents={topBannedAgents}
               type="bans"
               peakData={banPeakData}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <TeamAgentPreferences
+              title="Team Preferences for Top Picked Agents"
+              agents={topPickedAgents}
+              teamStats={teamStats}
+              type="picks"
+            />
+            <TeamAgentPreferences
+              title="Team Preferences for Top Banned Agents"
+              agents={topBannedAgents}
+              teamStats={teamStats}
+              type="bans"
             />
           </div>
 
