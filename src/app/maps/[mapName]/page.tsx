@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { mapStats } from '@/services/tournament/tournamentData';
-import AgentCard from '@/components/AgentCard';
+import { AgentCard } from '@/components/AgentCard';
 import { getAgentData } from '@/services/agent';
 import { AgentName } from '@/types/valorant';
 
@@ -55,8 +55,18 @@ export default function MapPage({ params }: MapPageProps) {
         {agentStats.map(({ agent, stats }) => (
           <AgentCard
             key={agent.name}
-            agent={agent}
-            stats={stats}
+            agent={agent.name}
+            stats={{
+              agent: agent.name,
+              role: agent.role,
+              totalPicks: stats.totalPicks,
+              totalBans: stats.totalBans,
+              pickRate: stats.pickRate,
+              banRate: stats.banRate,
+              firstPickRate: stats.firstPickRate,
+              teamWinRates: stats.teamWinRates,
+              mapWinRates: stats.mapWinRates
+            }}
           />
         ))}
       </div>

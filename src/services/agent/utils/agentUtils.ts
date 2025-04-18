@@ -170,4 +170,12 @@ export function getAgentRoleColor(role: AgentRole): string {
     'Sentinel': 'bg-yellow-500'
   };
   return colors[role] || 'bg-gray-500';
+}
+
+export function getAgentImage(agentName: string): string {
+  // Convert special characters to filesystem-friendly format
+  const imageName = agentName.toLowerCase()
+    .replace('/', '')  // Remove forward slashes
+    .replace(' ', '-'); // Replace spaces with hyphens
+  return `/images/agents/${imageName}.webp`;
 } 

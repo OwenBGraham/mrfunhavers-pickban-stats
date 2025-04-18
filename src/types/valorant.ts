@@ -92,12 +92,14 @@ export interface Tournament {
 
 // Statistics types
 export interface AgentStatistics {
-  agent: AgentName;
+  agent: string;
+  role: string;
   totalPicks: number;
   totalBans: number;
   pickRate: number;
+  banRate: number;
   firstPickRate: number;
-  teamWinRates: Record<Team['id'], number>;
+  teamWinRates: Record<string, number>;
   mapWinRates?: Record<string, number>;
 }
 

@@ -2,7 +2,7 @@ import { Agent } from '@/types/valorant';
 import { AgentRole } from '@/types/valorant';
 import { groupAgentsByRole } from '@/services/agent';
 import { agentPicks, agentBans } from '@/services/tournament/tournamentData';
-import AgentCard from './AgentCard';
+import { AgentCard } from './AgentCard';
 
 interface AgentRoleSectionProps {
   agents: Agent[];
@@ -30,12 +30,14 @@ export function AgentRoleSection({ agents, agentStats }: AgentRoleSectionProps) 
             {roleAgents.map((agent) => (
               <AgentCard
                 key={agent.name}
-                agent={agent}
+                agent={agent.name}
                 stats={{
                   agent: agent.name,
+                  role: agent.role,
                   totalPicks: agentPicks[agent.name] || 0,
                   totalBans: agentBans[agent.name] || 0,
                   pickRate: 0,
+                  banRate: 0,
                   firstPickRate: 0,
                   teamWinRates: {}
                 }}
