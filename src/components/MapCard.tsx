@@ -69,10 +69,10 @@ export function MapCard({ mapName, totalMatches, mostPicked, mostBanned, mapImag
           src={getAgentImage(mostBanned.agent)} 
           alt={`${mostBanned.agent} portrait`}
         />
-        <div className="w-11 h-4 left-[901px] top-[77px] absolute text-white text-base font-bold">
+        <div className="w-11 h-4 left-[901px] top-[74px] absolute text-white text-base font-bold">
           {mostBanned.agent}
         </div>
-        <div className="w-14 h-4 left-[1167px] top-[77px] absolute text-white text-sm font-bold">
+        <div className="w-14 h-4 left-[1167px] top-[74px] absolute text-white text-sm font-bold">
           {mostBanned.count} bans
         </div>
       </div>
