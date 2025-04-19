@@ -71,11 +71,17 @@ export default function MapPage({ params }: MapPageProps) {
     }
   });
 
-  // Prepare data for the graph
+  // Prepare data for the graph based on current filters and sorting
   const graphData = {
-    agentPicks: mapData.agentPicks,
-    agentBans: mapData.agentBans
+    agentPicks: {} as Record<AgentName, number>,
+    agentBans: {} as Record<AgentName, number>
   };
+
+  // Apply role filter and sorting to graph data
+  agentStats.forEach(({ agent, stats }) => {
+    graphData.agentPicks[agent.name] = stats.totalPicks;
+    graphData.agentBans[agent.name] = stats.totalBans;
+  });
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -129,6 +135,7 @@ export default function MapPage({ params }: MapPageProps) {
         <AgentStatsGraph
           agentPicks={graphData.agentPicks}
           agentBans={graphData.agentBans}
+          isMapPage={true}
         />
       </div>
 

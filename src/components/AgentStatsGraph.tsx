@@ -1,24 +1,32 @@
 'use client';
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { AgentName } from '@/types/valorant';
 
 interface AgentStatsGraphProps {
-  agentPicks: Record<string, number>;
-  agentBans: Record<string, number>;
+  agentPicks: Record<AgentName, number>;
+  agentBans: Record<AgentName, number>;
+  isMapPage?: boolean;
 }
 
-export const AgentStatsGraph = ({ agentPicks, agentBans }: AgentStatsGraphProps) => {
+export function AgentStatsGraph({ agentPicks, agentBans, isMapPage = false }: AgentStatsGraphProps) {
   // Transform the data into the format needed for the chart
-  const data = Object.keys(agentPicks).map(agentName => ({
+  const data = (Object.keys(agentPicks) as AgentName[]).map(agentName => ({
     name: agentName,
     picks: agentPicks[agentName],
-    bans: agentBans[agentName] || 0,
+    bans: agentBans[agentName] || 0
   }));
 
+  // Calculate the maximum value for the Y-axis
+  const maxPickValue = Math.max(...Object.values(agentPicks));
+  const maxBanValue = Math.max(...Object.values(agentBans));
+  const maxValue = Math.max(maxPickValue, maxBanValue);
+  const yAxisMax = isMapPage ? Math.ceil(maxValue + 5) : 300;
+
   return (
-    <div className="bg-white/5 p-6 rounded-lg">
-      <h3 className="text-lg font-semibold text-gray-300 mb-4">Agent Pick/Ban Statistics</h3>
-      <div className="h-[450px]">
+    <div className="bg-gray-800 rounded-lg p-4">
+      <h2 className="text-xl font-bold text-white mb-4">Agent Pick and Ban Statistics</h2>
+      <div className="h-[350px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}
@@ -26,56 +34,41 @@ export const AgentStatsGraph = ({ agentPicks, agentBans }: AgentStatsGraphProps)
               top: 20,
               right: 30,
               left: 20,
-              bottom: 70,
+              bottom: 80,
             }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-            <XAxis
-              dataKey="name"
+            <XAxis 
+              dataKey="name" 
+              stroke="#9CA3AF"
+              tick={{ fill: '#9CA3AF' }}
               angle={-45}
               textAnchor="end"
               height={80}
-              tick={{ 
-                fill: '#9CA3AF',
-                fontSize: 12,
-                fontFamily: 'Inter, sans-serif',
-              }}
               interval={0}
+              tickFormatter={(value) => value.charAt(0).toUpperCase() + value.slice(1)}
             />
-            <YAxis
-              domain={[0, 300]}
-              ticks={[0, 50, 100, 150, 200, 250, 300]}
+            <YAxis 
+              stroke="#9CA3AF"
               tick={{ fill: '#9CA3AF' }}
+              domain={[0, yAxisMax]}
             />
-            <Tooltip
-              contentStyle={{
+            <Tooltip 
+              contentStyle={{ 
                 backgroundColor: '#1F2937',
                 border: '1px solid #374151',
-                color: '#F3F4F6',
+                borderRadius: '0.5rem',
+                color: '#F3F4F6'
               }}
+              itemStyle={{ color: '#F3F4F6' }}
+              labelStyle={{ color: '#9CA3AF' }}
             />
-            <Legend 
-              verticalAlign="top"
-              layout="horizontal"
-              wrapperStyle={{
-                paddingBottom: '20px'
-              }}
-            />
-            <Bar
-              dataKey="picks"
-              name="Picks"
-              fill="#3B82F6"
-              radius={[4, 4, 0, 0]}
-            />
-            <Bar
-              dataKey="bans"
-              name="Bans"
-              fill="#EF4444"
-              radius={[4, 4, 0, 0]}
-            />
+            <Legend verticalAlign="top" height={36} />
+            <Bar dataKey="picks" name="Picks" fill="#00C3FF" />
+            <Bar dataKey="bans" name="Bans" fill="#FF4655" />
           </BarChart>
         </ResponsiveContainer>
       </div>
     </div>
   );
-}; 
+} 
