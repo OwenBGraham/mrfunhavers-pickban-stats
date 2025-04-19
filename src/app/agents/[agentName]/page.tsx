@@ -1,7 +1,10 @@
+'use client';
+
 import { notFound } from 'next/navigation';
 import { getAgentData } from '@/services/agent/utils/agentUtils';
 import { agentPicks, agentBans, mapStats } from '@/services/tournament/tournamentData';
 import { AgentName } from '@/types/valorant';
+import { BackButton } from '@/components/BackButton';
 
 interface AgentPageProps {
   params: {
@@ -38,6 +41,9 @@ export default function AgentPage({ params }: AgentPageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
+        <div className="mb-4">
+          <BackButton />
+        </div>
         <h1 className="text-3xl font-bold text-white mb-2">{agent.name}</h1>
         <p className="text-gray-300">{agent.role}</p>
       </div>
