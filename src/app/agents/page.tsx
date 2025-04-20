@@ -1,6 +1,7 @@
 'use client';
 
 import { AgentCard } from '@/components/AgentCard';
+import { BackButton } from '@/components/BackButton';
 import { getAgentData } from '@/services/agent';
 import { agentPicks, agentBans, mapStats } from '@/services/tournament/tournamentData';
 import { AgentName, AgentRole } from '@/types/valorant';
@@ -105,6 +106,9 @@ export default function AgentsPage() {
     <main className="min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
+          <div className="mb-4">
+            <BackButton />
+          </div>
           <h1 className="text-4xl font-bold mb-2">Agent Statistics</h1>
           <p className="text-gray-400">
             Detailed statistics for each agent across ALL maps in the tournaments.

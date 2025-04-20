@@ -1,6 +1,7 @@
 'use client';
 
 import { TeamCard } from "../../components/TeamCard";
+import { BackButton } from "@/components/BackButton";
 import { teamStats } from "@/services/tournament/tournamentData";
 import { useState } from "react";
 
@@ -101,6 +102,9 @@ export default function TeamsPage() {
     <main className="min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
+          <div className="mb-4">
+            <BackButton />
+          </div>
           <h1 className="text-4xl font-bold mb-2">Team Statistics</h1>
           <p className="text-gray-400 mb-4">
             Detailed statistics for each team in the tournament

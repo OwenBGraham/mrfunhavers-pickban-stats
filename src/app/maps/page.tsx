@@ -1,11 +1,15 @@
 import { mapStats } from "@/services/tournament/tournamentData";
 import { MapCard } from "@/components/MapCard";
+import { BackButton } from "@/components/BackButton";
 
 export default function MapsPage() {
   return (
     <main className="min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
+          <div className="mb-4">
+            <BackButton />
+          </div>
           <h1 className="text-4xl font-bold mb-2 text-white">Map Statistics</h1>
           <p className="text-gray-400">
             Detailed statistics for each map played in the tournament
