@@ -1,7 +1,7 @@
 'use client';
 
 import { notFound } from 'next/navigation';
-import { getAgentData } from '@/services/agent/utils/agentUtils';
+import { getAgentData, getAgentImage } from '@/services/agent/utils/agentUtils';
 import { agentPicks, agentBans, mapStats } from '@/services/tournament/tournamentData';
 import { AgentName } from '@/types/valorant';
 import { BackButton } from '@/components/BackButton';
@@ -44,8 +44,19 @@ export default function AgentPage({ params }: AgentPageProps) {
         <div className="mb-4">
           <BackButton />
         </div>
-        <h1 className="text-3xl font-bold text-white mb-2">{agent.name}</h1>
-        <p className="text-gray-300">{agent.role}</p>
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-16 flex-shrink-0">
+            <img
+              src={getAgentImage(agent.name)}
+              alt={agent.name}
+              className="w-full h-full object-cover rounded-lg"
+            />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-white mb-2">{agent.name}</h1>
+            <p className="text-gray-300">{agent.role}</p>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 mb-8">
