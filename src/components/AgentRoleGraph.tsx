@@ -16,9 +16,9 @@ const AgentRoleGraph: React.FC = () => {
   const roles: AgentRole[] = ['Controller', 'Duelist', 'Initiator', 'Sentinel'];
 
   return (
-    <div className="bg-white/5 p-4 rounded-lg">
+    <div className="bg-white/5 p-4 sm:p-6 rounded-lg">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-        <h2 className="text-xl font-semibold text-white mb-2 sm:mb-0">Agent Role Distribution</h2>
+        <h2 className="text-xl sm:text-2xl font-semibold text-white mb-2 sm:mb-0">Agent Role Distribution</h2>
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setSelectedRole(null)}
@@ -45,52 +45,70 @@ const AgentRoleGraph: React.FC = () => {
           ))}
         </div>
       </div>
-      <div className="relative h-[400px]">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={chartData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-            layout="vertical"
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-            <XAxis type="number" stroke="#9CA3AF" />
-            <YAxis
-              type="category"
-              dataKey="name"
-              stroke="#9CA3AF"
-              width={selectedRole ? 100 : 0}
-              tick={{ fill: '#9CA3AF' }}
-            />
-            <Tooltip
-              content={({ active, payload, label }) => {
-                if (active && payload && payload.length) {
-                  return (
-                    <div className="bg-gray-800 p-3 rounded-lg border border-gray-700">
-                      <p className="text-white font-semibold">{label}</p>
-                      <p className="text-gray-300">
-                        {selectedRole ? 'Pick Rate' : 'Total Picks'}: {payload[0].value}
-                      </p>
-                    </div>
-                  );
-                }
-                return null;
-              }}
-            />
-            <Bar
-              dataKey="value"
-              fill="#3B82F6"
-              radius={[0, 4, 4, 0]}
-              animationDuration={1000}
-            />
-          </BarChart>
-        </ResponsiveContainer>
+      <div className="relative">
+        <div className="absolute inset-0 bg-white/5 rounded-lg" />
+        <div className="relative bg-white/10 p-3 sm:p-4 rounded-lg">
+          <div className="relative h-[300px] sm:h-[400px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={chartData}
+                margin={{ 
+                  top: 10, 
+                  right: 10, 
+                  left: 20, 
+                  bottom: 5 
+                }}
+                layout="vertical"
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                <XAxis 
+                  type="number" 
+                  stroke="#9CA3AF"
+                  tick={{ fontSize: 12 }}
+                />
+                <YAxis
+                  type="category"
+                  dataKey="name"
+                  stroke="#9CA3AF"
+                  width={0}
+                  tick={{ 
+                    fill: '#9CA3AF',
+                    fontSize: 12,
+                    width: 0
+                  }}
+                />
+                <Tooltip
+                  content={({ active, payload, label }) => {
+                    if (active && payload && payload.length) {
+                      return (
+                        <div className="bg-gray-800 p-3 rounded-lg border border-gray-700">
+                          <p className="text-white font-semibold">{label}</p>
+                          <p className="text-gray-300">
+                            {selectedRole ? 'Pick Rate' : 'Total Picks'}: {payload[0].value}
+                          </p>
+                        </div>
+                      );
+                    }
+                    return null;
+                  }}
+                />
+                <Bar
+                  dataKey="value"
+                  fill="#3B82F6"
+                  radius={[0, 4, 4, 0]}
+                  animationDuration={1000}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
       </div>
       {selectedRole && (
-        <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <div className="mt-4 grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
           {chartData.map((agent) => (
             <div
               key={agent.name}
-              className="bg-white/5 p-3 rounded-lg flex items-center gap-3"
+              className="bg-white/10 p-3 rounded-lg flex items-center gap-3"
             >
               <div className="w-8 h-8 flex-shrink-0">
                 <img
