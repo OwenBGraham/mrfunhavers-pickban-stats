@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { AgentRole } from '../types/AgentRole';
-import { getAgentImage } from '../utils/getAgentImage';
+import { AgentRole } from '@/types/valorant';
+import { getAgentImage } from '@/services/agent/utils/agentUtils';
 
 const AgentRoleGraph: React.FC = () => {
   const [selectedRole, setSelectedRole] = useState<AgentRole | null>(null);
@@ -12,6 +12,8 @@ const AgentRoleGraph: React.FC = () => {
     { name: 'Agent 4', value: 10 },
     { name: 'Agent 5', value: 5 },
   ]);
+
+  const roles: AgentRole[] = ['Controller', 'Duelist', 'Initiator', 'Sentinel'];
 
   return (
     <div className="bg-white/5 p-4 rounded-lg">
@@ -28,7 +30,7 @@ const AgentRoleGraph: React.FC = () => {
           >
             All Roles
           </button>
-          {Object.values(AgentRole).map((role) => (
+          {roles.map((role) => (
             <button
               key={role}
               onClick={() => setSelectedRole(role)}
